@@ -12,7 +12,7 @@ class WebRequest():
         try:
             URL = "https://www.nadirdoviz.com/mobil/fiyatekrani.aspx?grupid=99"
             page = requests.get(URL)
-
+            test='mert'
             soup = BeautifulSoup(page.content, "html.parser")
 
             results = soup.find(id="stockTable")

@@ -1,0 +1,134 @@
+body {
+    padding-top: 0px;
+    padding-bottom: 20px;
+}
+.btn-primary {
+  background-color: #337ab7; 
+  border: none;
+  color: white;
+  transition-duration: 0.2s;
+  margin-top:20px;
+}
+
+.btn-primary:hover {
+  background-color:#286090; 
+  color: white;
+}
+
+.btnAddrec {
+  background-color: #007c39; 
+  border: none;
+  color: white;
+  transition-duration: 0.2s;
+  margin-top:20px;
+}
+
+.btnAddrec:hover {
+  background-color:#006f33; 
+  color: white;
+}
+
+.btnRed {
+  background-color: #d40511; 
+  border: none;
+  color: white;
+  transition-duration: 0.2s;
+  margin-top:20px;
+}
+
+.btnRed:hover {
+  background-color:#be040f; 
+  color: white;
+}
+
+.editlink {
+  color: #f99714;
+}
+
+.deletelink {
+  color: #D40511;
+}
+
+.navbar-dhl {
+    background-color: #ffcd00 !important;
+}
+
+    .navbar-dhl a {
+        color: #ba0c2f !important;
+        font-weight: bold;
+    }
+
+.navbar-brand img {
+    margin: -5px !important;
+}
+.videoContainer {
+    padding-top:60px;
+	width:400px; 
+	height:300px;
+}
+.colcol {
+	width:400px; 
+	height:300px;
+}
+
+.dropdown-toggle {
+	background-color: transparent;
+	border: none;
+	outline: none;
+}
+
+.dropdown-toggle::after {
+	background-color: rgb(213, 216, 25);
+	font-size: xx-large;
+	border: none;
+	cursor: pointer;
+	outline: none;
+}
+.container {
+    padding-right: 65px !important;
+    padding-left: 65px !important;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.formgroups label {
+  font-size: 20px;
+  font-weight:bold;
+
+}
+.addreclabel {
+  font-size: 17px;
+  font-weight:bold;
+
+}
+
+parent {
+  display: flex;
+  justify-content: space-around;
+}
+
+left {
+  border: 1px solid lightgray;
+  background-color: red;
+  width: 40%;
+}
+
+right {
+  border: 1px solid lightgray;
+  background-color: green;
+  width: 40%;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-child {
+  flex: 1;
+  border: 2px solid yellow;
+}  
+
+.flex-child:first-child {
+  margin-right: 20px;
+} 
+

@@ -1,0 +1,22 @@
+<tr>
+    <td>{{ debt.name }}</td>
+    <td>{{ debt.value|floatformat:4 }}</td>
+    <td>{{ debt.qty }}</td>
+    <td>{{ debt.sum|floatformat:4 }}</td>
+    <td>{{ debt.note }}</td>
+    <td><button class='btn' 
+        hx-get="{% url 'edit_debt' debt.pk %}" 
+        hx-target="closest tr" 
+        hx-swap="outerHTML">
+        <svg class="bi bi-pencil" width="32" height="32">
+            <use xlink:href="#pencil">
+        </svg></button></td>
+    <td><button class='btn' 
+        hx-confirm='Are you sure?' 
+        hx-target="closest tr" 
+        hx-swap="outerHTML swap:1s" 
+        hx-delete="{% url 'delete_debt' debt.pk %}">
+        <svg class="bi bi-trash3" width="32" height="32">
+            <use xlink:href="#trash3">
+        </svg></button></td>
+</tr>

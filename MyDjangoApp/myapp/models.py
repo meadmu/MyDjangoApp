@@ -26,6 +26,19 @@ class Stock(models.Model):
     def get_absolute_url(self):
         return reverse('stock_edit', kwargs={'pk': self.pk})
     
+class Debt(models.Model):
+    name=models.CharField(max_length=30)
+    value=models.FloatField(null=True)
+    qty=models.FloatField(null=True)
+    sum=models.FloatField(null=True)
+    note=models.CharField(max_length=200,null=True)
+    def __str__(self):
+        return self.name
+    
+    # The absolute path to get the url then reverse into 'student_edit' with keyword arguments (kwargs) primary key
+    def get_absolute_url(self):
+        return reverse('debt_edit', kwargs={'pk': self.pk})    
+    
 class Saving(models.Model):
     stock=models.CharField(max_length=30)
     qty=models.FloatField(null=True)

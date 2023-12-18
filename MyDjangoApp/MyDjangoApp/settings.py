@@ -25,9 +25,16 @@ SECRET_KEY = 'django-insecure-(rv39_kjb!f^-rl5uojig_^qar0)lffk7bogt1niw^xx%z(2wn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+# typically, os.path.join(os.path.dirname(__file__), 'media')
+MEDIA_ROOT = 'templates/media'
+MEDIA_URL = '/media/'
+
+
 ALLOWED_HOSTS = ['*']
-
-
+SESSION_ENGINE='django.contrib.sessions.backends.signed_cookies'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+LOGIN_URL = 'login'
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+    'fontawesomefree',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +130,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

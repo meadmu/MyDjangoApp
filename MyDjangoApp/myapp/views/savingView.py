@@ -101,19 +101,6 @@ def check_stock_sum(name,qty,value):
     if  qty is not None:
         return marketvalue*qty
     return 0 
-""" def add_stock_submit(request):
-    context = {}
-    form = StockForm(request.POST, request.FILES)
-    
-    if form.is_valid():
-        new_form=form.save(commit=False)
-        new_form.value=check_stock_value(new_form.name)
-        new_form.sum=new_form.qty*new_form.value
-        context['form'] = new_form
-        context['stock'] = new_form.save()
-    else:
-        return render(request, 'partial/stock/add_stock.html', context)
-    return render(request, 'partial/stock/stock_row.html', context) """
 
 def add_stock_submit(request):
     context = {}

@@ -227,6 +227,9 @@ body {
     margin-right: auto;
     margin-left: auto;
 }
+.container-login {
+  padding-top: 65px;
+}
 
 .formgroups label {
   font-size: 20px;
@@ -398,5 +401,5 @@ body {
   }
   
   .totalVal {
-    font-size:"clamp(110px, 0.8vw, 40px)";
+    font-size:clamp(25px, 2.6vw, 48px);
   }

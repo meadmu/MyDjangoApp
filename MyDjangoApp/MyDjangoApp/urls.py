@@ -65,5 +65,5 @@ urlpatterns = [
     path('<int:debt_pk>/edit_debt_submit', edit_debt_submit, name='edit_debt_submit'),
     path('get_debt_total', get_debt_total, name='get_debt_total'),
     path('get_stock_total', get_stock_total, name='get_stock_total'),
-    path('', views.savingView.chart, name='pie-chart'),
+    path('', views.savingView.get_charts, name='pie-chart'),
     ]

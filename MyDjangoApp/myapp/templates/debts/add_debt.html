@@ -1,25 +1,25 @@
 <tr>
-    <td data-label="Name">
+    <td>
         {{ form.name }}
         {{ form.name.errors }}
     </td>
-    <td data-label="Value">
+    <td>
         {{ form.value }}
         {{ form.value.errors }}
     </td>
-    <td data-label="Qty">
+    <td>
         {{ form.qty }}
         {{ form.qty.errors }}
     </td>
-    <td data-label="Sum">
+    <td>
         {{ form.sum }}
         {{ form.sum.errors }}
     </td>
-    <td data-label="Note">
+    <td>
         {{ form.note }}
         {{ form.note.errors }}
     </td>
-    <td data-label="Save"><a href="#" 
+    <td><a href="#" 
             hx-post="{% url 'add_debt_submit' %}" 
             hx-target="closest tr" 
             hx-swap="outerHTML" 
@@ -31,7 +31,7 @@
             </svg>
         </a>
     </td>
-    <td data-label="Cancel"><a href="#" 
+    <td><a href="#" 
             hx-get="{% url 'add_debt_cancel' %}" 
             hx-target="closest tr" 
             hx-swap="outerHTML" 

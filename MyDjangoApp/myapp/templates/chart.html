@@ -10,6 +10,7 @@
       <link rel="stylesheet" href="/static/style.css">      
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="/static/w3.css">
+      <title>SMARTMONEY | CHARTS</title>
   </head>
     <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
         <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -44,7 +45,7 @@
                 <i class="fa-solid fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item" href="/logout">Oturumu Kapat</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
                 </ul>
               </div>
           </div>
@@ -71,10 +72,10 @@
           <div class="w3-container" >
           
             <div id="container" style="display:flex;flex-wrap: wrap; justify-content: center;">
-            <div style="width:clamp(400px, 50vw, 50%); height: clamp(500px, 50vw, 1000px);">
+            <div style="width:clamp(300px, 30vw, 50%); height: clamp(500px, 50vw, 1000px);">
               <canvas id="pie-chart"></canvas>  
             </div>  
-            <div style="width:clamp(400px, 50vw, 50%);height: clamp(500px, 50vw, 1000px);">
+            <div style="width:clamp(300px, 30vw, 50%);height: clamp(500px, 50vw, 1000px);">
               <canvas id="pie-chart2"></canvas>
             </div>
             </div>
@@ -83,8 +84,8 @@
         </div>
         <script>
           function w3_open() {
-            document.getElementById("main").style.marginLeft = "clamp(80px, 15%, 1000px)";
-            document.getElementById("mySidebar").style.width = "clamp(80px, 15%, 1000px)";
+            document.getElementById("main").style.marginLeft = "clamp(110px, 15%, 1000px)";
+            document.getElementById("mySidebar").style.width = "clamp(110px, 15%, 1000px)";
             document.getElementById("mySidebar").style.display = "block";
             document.getElementById("openNav").style.display = 'none';
           }

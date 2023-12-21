@@ -160,7 +160,8 @@ def get_stock_total(request):
 
     return render(request, 'totalValue.html', {'totalVal':totalVal})
 
-def chart(request):
+@login_required
+def get_charts(request):
     labelsStock = []
     dataStock = []
 

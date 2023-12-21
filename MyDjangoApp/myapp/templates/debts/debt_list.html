@@ -1,16 +1,14 @@
-<table>
+<table class="table table-striped w-100 d-block d-md-table">
     <thead>
         <th>Name</th>
         <th>Value</th>
         <th>Quantity</th>
         <th>Sum</th>
         <th>Note</th>
-        <th>Edit</th>
-        <th>Delete</th>
     </thead>
     <tbody>
-        {% for stock in stocks %}
-            {% include 'stock/stock_row.html' %}
+        {% for debt in debts %}
+            {% include 'debt/debt_row.html' %}
         {% endfor %}
     </tbody>
 </table>

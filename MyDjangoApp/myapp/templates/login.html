@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -12,7 +13,10 @@
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/style.css">      
     <link rel="stylesheet" href="/static/w3.css">
-    <title>LOGIN</title>
+    <link href="{% static 'fontawesomefree/css/fontawesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/brands.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'fontawesomefree/css/solid.css' %}" rel="stylesheet" type="text/css">
+    <title>SMARTMONEY | LOGIN</title>
 </head>
 
 <body>
@@ -22,22 +26,12 @@
                 <a class="navbar-brand myLogo right" href="/">
                     <img src="/static/smartmoney_logo_trans.png"/>
                 </a>
-                <a class="navbar-brand navbar-dhl" href="/">Login</a>
+                <!-- <a class="navbar-brand navbar-dhl" href="/">Login</a> -->
             </div>	
-            <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" style="background-color:transparent"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                {{ username }}
-                <i class="fas fa-user"></i>
-                </a>
-    
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li><a class="dropdown-item" href="/logout">Oturumu Kapat</a></li>
-                </ul>
-            </div>
         </div>
     
     </div>
-    <div class="w3-container">
+    <!-- <div class="w3-container">
         <div class="mx-auto" style="width: 500px" ;>
             <form method="post" class="form-horizontal">
                 {% csrf_token%}
@@ -59,6 +53,40 @@
                     {% endfor %}
                 </div>
             </form>
+        </div>
+    </div> -->
+    <div class="container container-login">
+        <div class="d-flex justify-content-center h-100">
+            <div class="card" style="height: 250px;">
+                <div class="card-header">
+                    <h3>Sign In</h3>
+                </div>
+                <div class="card-body">
+                        {% if msg %}
+                            <div class="alert alert-danger">
+                                {{ msg }}
+                            </div>
+                        {% endif %}
+                    <form action="" method = "POST">
+                        {% csrf_token%}
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="username" id="username" name="username" ">						
+                        </div>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <input type="password" class="form-control" placeholder="password" id="password" name="password" >
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Login" class="btnLogin btn float-right login_btn">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
     

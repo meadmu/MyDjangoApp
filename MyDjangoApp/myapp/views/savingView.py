@@ -62,7 +62,7 @@ class SavingForm(forms.ModelForm):
 def get_saving_list(request):
     context = {}
     foo=myapp.stockMarket
-    foo.WebRequest.getRequest(insert=1,clean=0,update=1)
+    foo.WebRequest.getRequest(insert=0,clean=0,update=1)
     totalSaving=0
     savings=Saving.objects.all()
     for saving in savings:

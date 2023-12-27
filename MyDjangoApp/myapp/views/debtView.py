@@ -2,7 +2,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.shortcuts import render
 #from .models import Phone
-from myapp.models import Debt,StockMarket
+from myapp.models import Debt,StockMarket,Debt
 #from .models import Saving as Stock 
 import myapp.stockMarket
 import myapp.choices as choices
@@ -17,32 +17,16 @@ from django import forms
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout 
 from myapp.forms import LoginForm
+from django.db.models import Sum
 # Create your views here.
 #kullanici mehim,mert1907
 
-
-# class HomePageView(TemplateView):
-#     template_name = 'home.html'
-
+username=''
 def DebtHomePageView(request):
     username=request.user.username
     return render(request, 'debt/debts.html', {'username':username})
 
 # login page
-""" def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user:
-                login(request, user)    
-                return redirect('/')
-    else:
-        form = LoginForm()
-    return render(request, 'login.html', {'form': form}) """
-
 def user_login(request):
     if request.method=='POST':
         form = AuthenticationForm(data=request.POST)
@@ -69,7 +53,7 @@ class DebtForm(forms.ModelForm):
     sum = forms.FloatField(disabled=True,required=False)
     value=forms.FloatField(disabled=True,required=False)
     qty=forms.FloatField()
-    name= forms.CharField(widget=forms.Select(choices=choices.STOCK_CHOICES))
+    name= forms.CharField(widget=forms.Select(choices=choices.SAVING_CHOICES))
     class Meta:
         model = Debt
         fields = ('name', 'value' , 'qty','sum','note') 
@@ -77,26 +61,21 @@ class DebtForm(forms.ModelForm):
 @login_required
 def get_debt_list(request):
     context = {}
-    #context['stocks'] = Stock.objects.all()
-    #test=Stock.objects.all().values_list()
-    #test=Stock.objects.filter(name='Altın/TL').update(value=9999)
     foo=myapp.stockMarket
     foo.WebRequest.getRequest(insert=0,clean=0,update=1)
     totalDebt=0
-    test=Debt.objects.all()
-    for item in test:
-        marketvalue = StockMarket.objects.filter(name=item.name).values_list('value', flat = True)
-        if marketvalue.exists() and item.value is not None and item.qty is not None:
-            sum=item.qty*marketvalue[0]
-            item.sum=sum
+    debts=Debt.objects.all()
+    for debt in debts:
+        marketvalue = StockMarket.objects.filter(name=debt.name).values_list('value', flat = True)
+        if marketvalue.exists() and debt.value is not None and debt.qty is not None:
+            sum=debt.qty*marketvalue[0]
+            debt.sum=sum
             totalDebt+=sum
-            item.value=marketvalue[0]
-
-    context['debts'] = test
-    request.session['totalDebt'] = totalDebt
-    response=render(request, 'debt/debt_list.html', context)
-    response['HX-Trigger']='getTotalValue'
-    return response
+            debt.value=marketvalue[0]
+            debt.save()
+    context['debts'] = debts
+    context['totalval']=get_debt_sum()
+    return render(request, 'debt/debt_list.html', context)
 
 def add_debt(request):
     context = {'form': DebtForm()}
@@ -119,10 +98,11 @@ def add_debt_submit(request):
     form = DebtForm(request.POST, request.FILES)
     context['form'] = form
     if form.is_valid():
-        new_form=form.instance
-        new_form.value=check_debt_value(new_form.name)
-        new_form.sum=new_form.qty*new_form.value
+        form_=form.instance
+        form_.value=check_debt_value(form_.name)
+        form_.sum=form_.qty*form_.value
         context['debt'] = form.save()
+        context['totalval']=get_debt_sum()
     else:
         return render(request, 'debt/add_debt.html', context)
     return render(request, 'debt/debt_row.html', context)
@@ -132,9 +112,11 @@ def add_debt_cancel(request):
     return HttpResponse()
 
 def delete_debt(request, debt_pk):
+    context={}
     debt = Debt.objects.get(pk=debt_pk)
     debt.delete()
-    return HttpResponse()
+    context['totalval']=get_debt_sum()
+    return render(request, 'debt/delete_debt.html', context)
 
 def edit_debt(request, debt_pk):
     debt = Debt.objects.get(pk=debt_pk)
@@ -159,15 +141,39 @@ def edit_debt_submit(request, debt_pk):
             new_form=form.instance
             new_form.value=check_debt_value(new_form.name)
             new_form.sum=new_form.qty*new_form.value
+            new_form.save()
             context['debt'] = form.save()
-            #form.save()
+            context['totalval']=get_debt_sum()
         else:
             return render(request, 'debt/edit_debt.html', context)
     return render(request, 'debt/debt_row.html', context)
 
-def get_debt_total(request):
-    totalVal=""
-    if 'totalDebt' in request.session:
-        totalVal = str(request.session['totalDebt'])
+def get_debt_sum():
+    totalVal=Debt.objects.aggregate(Sum('sum'))
+    return(totalVal['sum__sum'])
 
-    return render(request, 'totalValue.html', {'totalVal':totalVal})
+@login_required
+def get_charts(request):
+    labelsDebt = []
+    dataDebt = []
+
+    labelsDebt = []
+    dataDebt = []
+    username=request.user.username
+    queryset1 = Debt.objects.all()
+    for debt in queryset1:
+        labelsDebt.append(debt.name)
+        dataDebt.append(debt.sum)
+
+    queryset2 = Debt.objects.all()
+    for debt in queryset2:
+        labelsDebt.append(debt.name)
+        dataDebt.append(debt.sum)
+
+    return render(request, 'chart.html', {
+        'labelsDebt': labelsDebt,
+        'dataDebt': dataDebt,
+        'labelsDebt': labelsDebt,
+        'dataDebt': dataDebt,
+        'username':username
+    })

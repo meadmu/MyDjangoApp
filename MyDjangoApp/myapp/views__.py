@@ -69,7 +69,7 @@ class StockForm(forms.ModelForm):
     sum = forms.FloatField(disabled=True,required=False)
     value=forms.FloatField(disabled=True,required=False)
     qty=forms.FloatField()
-    name= forms.CharField(widget=forms.Select(choices=choices.STOCK_CHOICES))
+    name= forms.CharField(widget=forms.Select(choices=choices.SAVING_CHOICES))
     class Meta:
         model = Stock
         fields = ('name', 'value' , 'qty','sum','note') 

@@ -1,11 +1,11 @@
 <tr>
-    <td data-label="Name">{{ debt.name }}</td>
-    <td data-label="Value">{{ debt.value|floatformat:4 }}</td>
-    <td data-label="Qty">{{ debt.qty }}</td>
-    <td data-label="Sum">{{ debt.sum|floatformat:4 }}</td>
-    <td data-label="Note">{{ debt.note }}</td>
+    <td data-label="Name">{{ saving.name }}</td>
+    <td data-label="Value">{{ saving.value|floatformat:4 }}</td>
+    <td data-label="Qty">{{ saving.qty }}</td>
+    <td data-label="Sum">{{ saving.sum|floatformat:4 }}</td>
+    <td data-label="Note">{{ saving.note }}</td>
     <td data-label="Edit"><button class='btn' 
-        hx-get="{% url 'edit_debt' debt.pk %}" 
+        hx-get="{% url 'edit_saving' saving.pk %}" 
         hx-target="closest tr" 
         hx-swap="outerHTML">
         <svg class="bi bi-pencil" width="32" height="32">
@@ -15,7 +15,7 @@
         hx-confirm='Are you sure?' 
         hx-target="closest tr" 
         hx-swap="outerHTML swap:1s" 
-        hx-delete="{% url 'delete_debt' debt.pk %}">
+        hx-delete="{% url 'delete_saving' saving.pk %}">
         <svg class="bi bi-trash3" width="32" height="32">
             <use xlink:href="#trash3">
         </svg></button></td>

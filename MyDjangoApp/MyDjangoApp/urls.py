@@ -19,17 +19,16 @@ from django.urls import path
 from django.contrib.auth.decorators import login_required
 import myapp.views as views
 from myapp.views.savingView import (
-    HomePageView, 
-    get_stock_list,
-    add_stock,
-    add_stock_submit,
-    add_stock_cancel,
-    edit_stock,
-    edit_stock_submit,
-    delete_stock,
+    SavingHomePageView, 
+    get_saving_list,
+    add_saving,
+    add_saving_submit,
+    add_saving_cancel,
+    edit_saving,
+    edit_saving_submit,
+    delete_saving,
     user_login,
     user_logout,
-    get_stock_total
 )
 from myapp.views.debtView import (
     DebtHomePageView, 
@@ -40,19 +39,18 @@ from myapp.views.debtView import (
     edit_debt,
     edit_debt_submit,
     delete_debt,
-    get_debt_total
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('savings', login_required(HomePageView), name='home'),
-    path('get_stock_list', get_stock_list, name='get_stock_list'),
-    path('add_stock', add_stock, name='add_stock'),
-    path('add_stock_submit', add_stock_submit, name='add_stock_submit'),
-    path('add_stock_cancel', add_stock_cancel, name='add_stock_cancel'),
-    path('<int:stock_pk>/delete_stock', delete_stock, name='delete_stock'),
-    path('<int:stock_pk>/edit_stock', edit_stock, name='edit_stock'),
-    path('<int:stock_pk>/edit_stock_submit', edit_stock_submit, name='edit_stock_submit'),
+    path('savings', login_required(SavingHomePageView), name='home'),
+    path('get_saving_list', get_saving_list, name='get_saving_list'),
+    path('add_saving', add_saving, name='add_saving'),
+    path('add_saving_submit', add_saving_submit, name='add_saving_submit'),
+    path('add_saving_cancel', add_saving_cancel, name='add_saving_cancel'),
+    path('<int:saving_pk>/delete_saving', delete_saving, name='delete_saving'),
+    path('<int:saving_pk>/edit_saving', edit_saving, name='edit_saving'),
+    path('<int:saving_pk>/edit_saving_submit', edit_saving_submit, name='edit_saving_submit'),
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
     path('debts', login_required(DebtHomePageView), name='debts'),
@@ -63,7 +61,5 @@ urlpatterns = [
     path('<int:debt_pk>/delete_debt', delete_debt, name='delete_debt'),
     path('<int:debt_pk>/edit_debt', edit_debt, name='edit_debt'),
     path('<int:debt_pk>/edit_debt_submit', edit_debt_submit, name='edit_debt_submit'),
-    path('get_debt_total', get_debt_total, name='get_debt_total'),
-    path('get_stock_total', get_stock_total, name='get_stock_total'),
     path('', views.savingView.get_charts, name='pie-chart'),
     ]

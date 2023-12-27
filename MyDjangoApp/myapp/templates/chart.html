@@ -102,11 +102,11 @@
         type: 'doughnut',
         data: {
           datasets: [{
-            data: {{ dataStock|safe }},
+            data: {{ dataSaving|safe }},
             backgroundColor: bgColor,
-            label: 'Stock'
+            label: 'Saving'
           }],
-          labels: {{ labelsStock|safe }}
+          labels: {{ labelsSaving|safe }}
         },
         options: {
           maintainAspectRatio: false,

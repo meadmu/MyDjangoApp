@@ -1,4 +1,4 @@
-STOCK_CHOICES= [
+SAVING_CHOICES= [
 ('Altın/ONS','Altın/ONS'),
 ('Gümüş/ONS','Gümüş/ONS'),
 ('Altın/TL','Altın/TL'),

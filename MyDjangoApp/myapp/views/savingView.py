@@ -2,7 +2,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.shortcuts import render
 #from .models import Phone
-from myapp.models import Stock,StockMarket,Debt
+from myapp.models import Saving,StockMarket,Debt
 #from .models import Saving as Stock 
 import myapp.stockMarket
 import myapp.choices as choices
@@ -17,17 +17,14 @@ from django import forms
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout 
 from myapp.forms import LoginForm
-from django_htmx.http import trigger_client_event
+from django.db.models import Sum
 # Create your views here.
 #kullanici mehim,mert1907
 
-
-# class HomePageView(TemplateView):
-#     template_name = 'home.html'
 username=''
-def HomePageView(request):
+def SavingHomePageView(request):
     username=request.user.username
-    return render(request, 'stock/savings.html', {'username':username})
+    return render(request, 'saving/savings.html', {'username':username})
 
 # login page
 def user_login(request):
@@ -51,127 +48,122 @@ def user_logout(request):
     messages.success(request,f'You have been logged out.')
     return redirect('login')  
 
-class StockForm(forms.ModelForm):
+class SavingForm(forms.ModelForm):
     note = forms.CharField(required=False)
     sum = forms.FloatField(disabled=True,required=False)
     value=forms.FloatField(disabled=True,required=False)
     qty=forms.FloatField()
-    name= forms.CharField(widget=forms.Select(choices=choices.STOCK_CHOICES))
+    name= forms.CharField(widget=forms.Select(choices=choices.SAVING_CHOICES))
     class Meta:
-        model = Stock
+        model = Saving
         fields = ('name', 'value' , 'qty','sum','note') 
 
 @login_required
-def get_stock_list(request):
+def get_saving_list(request):
     context = {}
-    #context['stocks'] = Stock.objects.all()
-    #test=Stock.objects.all().values_list()
-    #test=Stock.objects.filter(name='Altın/TL').update(value=9999)
     foo=myapp.stockMarket
     foo.WebRequest.getRequest(insert=0,clean=0,update=1)
     totalSaving=0
-    test=Stock.objects.all()
-    for item in test:
-        marketvalue = StockMarket.objects.filter(name=item.name).values_list('value', flat = True)
-        if marketvalue.exists() and item.value is not None and item.qty is not None:
-            # print('--------'+item.name+'--------'+str(marketvalue[0])+'--------')
-            sum=item.qty*marketvalue[0]
-            item.sum=sum
+    savings=Saving.objects.all()
+    for saving in savings:
+        marketvalue = StockMarket.objects.filter(name=saving.name).values_list('value', flat = True)
+        if marketvalue.exists() and saving.value is not None and saving.qty is not None:
+            sum=saving.qty*marketvalue[0]
+            saving.sum=sum
             totalSaving+=sum
-            item.value=marketvalue[0]
-    context['stocks'] = test
-    request.session['totalSaving'] = totalSaving
-    response=render(request, 'stock/stock_list.html', context)
-    response['HX-Trigger']='getTotalValue'
-    #trigger_client_event(response,'getTotalValue',{})
-    return response
+            saving.value=marketvalue[0]
+            saving.save()
+    context['savings'] = savings
+    context['totalval']=get_saving_sum()
+    return render(request, 'saving/saving_list.html', context)
 
-def add_stock(request):
-    context = {'form': StockForm()}
-    return render(request, 'stock/add_stock.html', context)
+def add_saving(request):
+    context = {'form': SavingForm()}
+    return render(request, 'saving/add_saving.html', context)
 
-def check_stock_value(name):
+def check_saving_value(name):
     marketvalue = StockMarket.objects.filter(name=name).values_list('value', flat = True)
     if marketvalue.exists():
         return marketvalue[0]
     return 0
 
-def check_stock_sum(name,qty,value):
+def check_saving_sum(name,qty,value):
     marketvalue = StockMarket.objects.filter(name=name).values_list('value', flat = True)
     if  qty is not None:
         return marketvalue*qty
     return 0 
 
-def add_stock_submit(request):
+def add_saving_submit(request):
     context = {}
-    form = StockForm(request.POST, request.FILES)
+    form = SavingForm(request.POST, request.FILES)
     context['form'] = form
     if form.is_valid():
-        new_form=form.instance
-        new_form.value=check_stock_value(new_form.name)
-        new_form.sum=new_form.qty*new_form.value
-        context['stock'] = form.save()
+        form_=form.instance
+        form_.value=check_saving_value(form_.name)
+        form_.sum=form_.qty*form_.value
+        context['saving'] = form.save()
+        context['totalval']=get_saving_sum()
     else:
-        return render(request, 'stock/add_stock.html', context)
-    return render(request, 'stock/stock_row.html', context)
+        return render(request, 'saving/add_saving.html', context)
+    return render(request, 'saving/saving_row.html', context)
 
 
-def add_stock_cancel(request):
+def add_saving_cancel(request):
     return HttpResponse()
 
-def delete_stock(request, stock_pk):
-    stock = Stock.objects.get(pk=stock_pk)
-    stock.delete()
-    return HttpResponse()
+def delete_saving(request, saving_pk):
+    context={}
+    saving = Saving.objects.get(pk=saving_pk)
+    saving.delete()
+    context['totalval']=get_saving_sum()
+    return render(request, 'saving/delete_saving.html', context)
 
-def edit_stock(request, stock_pk):
-    stock = Stock.objects.get(pk=stock_pk)
+def edit_saving(request, saving_pk):
+    saving = Saving.objects.get(pk=saving_pk)
     context = {}
-    context['stock'] = stock
-    context['form'] = StockForm(initial={
-        'name':stock.name,
-        'value': stock.value,
-        'qty': stock.qty,
-        'sum': stock.sum,
-        'note': stock.note,
+    context['saving'] = saving
+    context['form'] = SavingForm(initial={
+        'name':saving.name,
+        'value': saving.value,
+        'qty': saving.qty,
+        'sum': saving.sum,
+        'note': saving.note,
     })
-    return render(request, 'stock/edit_stock.html', context)
+    return render(request, 'saving/edit_saving.html', context)
 
-def edit_stock_submit(request, stock_pk):
+def edit_saving_submit(request, saving_pk):
     context = {}
-    stock = Stock.objects.get(pk=stock_pk)
-    context['stock'] = stock
+    saving = Saving.objects.get(pk=saving_pk)
+    context['saving'] = saving
     if request.method == 'POST':
-        form = StockForm(request.POST, instance=stock)
+        form = SavingForm(request.POST, instance=saving)
         if form.is_valid():
             new_form=form.instance
-            new_form.value=check_stock_value(new_form.name)
+            new_form.value=check_saving_value(new_form.name)
             new_form.sum=new_form.qty*new_form.value
-            context['stock'] = form.save()
-            #form.save()
+            new_form.save()
+            context['saving'] = form.save()
+            context['totalval']=get_saving_sum()
         else:
-            return render(request, 'stock/edit_stock.html', context)
-    return render(request, 'stock/stock_row.html', context)
+            return render(request, 'saving/edit_saving.html', context)
+    return render(request, 'saving/saving_row.html', context)
 
-def get_stock_total(request):
-    totalVal=""
-    if 'totalSaving' in request.session:
-        totalVal = str(request.session['totalSaving'])
-
-    return render(request, 'totalValue.html', {'totalVal':totalVal})
+def get_saving_sum():
+    totalVal=Saving.objects.aggregate(Sum('sum'))
+    return(totalVal['sum__sum'])
 
 @login_required
 def get_charts(request):
-    labelsStock = []
-    dataStock = []
+    labelsSaving = []
+    dataSaving = []
 
     labelsDebt = []
     dataDebt = []
     username=request.user.username
-    queryset1 = Stock.objects.all()
-    for stock in queryset1:
-        labelsStock.append(stock.name)
-        dataStock.append(stock.sum)
+    queryset1 = Saving.objects.all()
+    for saving in queryset1:
+        labelsSaving.append(saving.name)
+        dataSaving.append(saving.sum)
 
     queryset2 = Debt.objects.all()
     for debt in queryset2:
@@ -179,8 +171,8 @@ def get_charts(request):
         dataDebt.append(debt.sum)
 
     return render(request, 'chart.html', {
-        'labelsStock': labelsStock,
-        'dataStock': dataStock,
+        'labelsSaving': labelsSaving,
+        'dataSaving': dataSaving,
         'labelsDebt': labelsDebt,
         'dataDebt': dataDebt,
         'username':username

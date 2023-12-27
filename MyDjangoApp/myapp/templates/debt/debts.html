@@ -70,7 +70,7 @@
      
         <!-- Page content -->
         <div class="w3-container">        
-          <!-- <h1>debts:</h1> -->
+          <!-- <h1>Stocks:</h1> -->
           <div style="width: 100%;">
             <div style="float: left; width: 50%;">
                <button class='btn' hx-get="{% url 'add_debt' %}" hx-target="next tbody" hx-swap="afterbegin">
@@ -81,7 +81,12 @@
             </div>    
             <div style="float: left; width: 50%;">
                <div style="float: right;" >
-                   <h1 id="totalVal" hx-get="{% url 'get_debt_total' %}" hx-trigger="getTotalValue from:body" hx-swap="outerHTML"></h1>
+                  <div style="display: flex;">
+                     <h1>Total:</h1>
+                     <h1 id="totalval">{{totalval}}</h1>
+                     <h1>₺</h1>   
+                  </div>
+                   
                </div>
                   
             </div>

@@ -2,8 +2,8 @@ from django.template import loader
 from django.http import HttpResponse
 from django.shortcuts import render
 #from .models import Phone
-from myapp.models import Debt,StockMarket,Debt
-#from .models import Saving as Stock 
+from myapp.models import Income,StockMarket,Debt
+#from .models import Income as Stock 
 import myapp.stockMarket
 import myapp.choices as choices
 from django.contrib.auth import get_user_model
@@ -22,9 +22,9 @@ from django.db.models import Sum
 #kullanici mehim,mert1907
 
 username=''
-def DebtHomePageView(request):
+def IncomeHomePageView(request):
     username=request.user.username
-    return render(request, 'debt/debts.html', {'username':username})
+    return render(request, 'income/incomes.html', {'username':username})
 
 # login page
 def user_login(request):
@@ -48,139 +48,139 @@ def user_logout(request):
     messages.success(request,f'You have been logged out.')
     return redirect('login')  
 
-class DebtForm(forms.ModelForm):
+class IncomeForm(forms.ModelForm):
     note = forms.CharField(required=False)
     sum = forms.FloatField(disabled=True,required=False)
     value=forms.FloatField(disabled=True,required=False)
     qty=forms.FloatField()
     name= forms.CharField(widget=forms.Select(choices=choices.SAVING_CHOICES))
     class Meta:
-        model = Debt
+        model = Income
         fields = ('name', 'value' , 'qty','sum','note') 
 
 @login_required
-def get_debt_list(request):
+def get_income_list(request):
     context = {}
     foo=myapp.stockMarket
     foo.WebRequest.getRequest(insert=0,clean=0,update=1)
-    totalDebt=0
-    debts=Debt.objects.all()
-    for debt in debts:
-        marketvalue = StockMarket.objects.filter(name=debt.name).values_list('value', flat = True)
-        if marketvalue.exists() and debt.value is not None and debt.qty is not None:
-            sum=debt.qty*marketvalue[0]
-            debt.sum=sum
-            totalDebt+=sum
-            debt.value=marketvalue[0]
-            debt.save()
-    context['debts'] = debts
-    context['totalval']=get_debt_sum()
-    return render(request, 'debt/debt_list.html', context)
+    totalIncome=0
+    incomes=Income.objects.all()
+    for income in incomes:
+        marketvalue = StockMarket.objects.filter(name=income.name).values_list('value', flat = True)
+        if marketvalue.exists() and income.value is not None and income.qty is not None:
+            sum=income.qty*marketvalue[0]
+            income.sum=sum
+            totalIncome+=sum
+            income.value=marketvalue[0]
+            income.save()
+    context['incomes'] = incomes
+    context['totalval']=get_income_sum()
+    return render(request, 'income/income_list.html', context)
 
-def add_debt(request):
-    context = {'form': DebtForm()}
-    return render(request, 'debt/add_debt.html', context)
+def add_income(request):
+    context = {'form': IncomeForm()}
+    return render(request, 'income/add_income.html', context)
 
-def check_debt_value(name):
+def check_income_value(name):
     marketvalue = StockMarket.objects.filter(name=name).values_list('value', flat = True)
     if marketvalue.exists():
         return marketvalue[0]
     return 0
 
-def check_debt_sum(name,qty,value):
+def check_income_sum(name,qty,value):
     marketvalue = StockMarket.objects.filter(name=name).values_list('value', flat = True)
     if  qty is not None:
         return marketvalue*qty
     return 0 
 
-def add_debt_submit(request):
+def add_income_submit(request):
     context = {}
-    form = DebtForm(request.POST, request.FILES)
+    form = IncomeForm(request.POST, request.FILES)
     context['form'] = form
     if form.is_valid():
         form_=form.instance
-        form_.value=check_debt_value(form_.name)
+        form_.value=check_income_value(form_.name)
         form_.sum=form_.qty*form_.value
-        context['debt'] = form.save()
-        context['totalval']=get_debt_sum()
+        context['income'] = form.save()
+        context['totalval']=get_income_sum()
     else:
-        return render(request, 'debt/add_debt.html', context)
-    return render(request, 'debt/debt_row.html', context)
+        return render(request, 'income/add_income.html', context)
+    return render(request, 'income/income_row.html', context)
 
 
-def add_debt_cancel(request):
+def add_income_cancel(request):
     return HttpResponse()
 
-def delete_debt(request, debt_pk):
+def delete_income(request, income_pk):
     context={}
-    debt = Debt.objects.get(pk=debt_pk)
-    debt.delete()
-    context['totalval']=get_debt_sum()
-    return render(request, 'debt/delete_debt.html', context)
+    income = Income.objects.get(pk=income_pk)
+    income.delete()
+    context['totalval']=get_income_sum()
+    return render(request, 'income/delete_income.html', context)
 
-def edit_debt(request, debt_pk):
-    debt = Debt.objects.get(pk=debt_pk)
+def edit_income(request, income_pk):
+    income = Income.objects.get(pk=income_pk)
     context = {}
-    context['debt'] = debt
-    context['form'] = DebtForm(initial={
-        'name':debt.name,
-        'value': debt.value,
-        'qty': debt.qty,
-        'sum': debt.sum,
-        'note': debt.note,
+    context['income'] = income
+    context['form'] = IncomeForm(initial={
+        'name':income.name,
+        'value': income.value,
+        'qty': income.qty,
+        'sum': income.sum,
+        'note': income.note,
     })
-    return render(request, 'debt/edit_debt.html', context)
+    return render(request, 'income/edit_income.html', context)
 
-def edit_debt_submit(request, debt_pk):
+def edit_income_submit(request, income_pk):
     context = {}
-    debt = Debt.objects.get(pk=debt_pk)
-    context['debt'] = debt
+    income = Income.objects.get(pk=income_pk)
+    context['income'] = income
     if request.method == 'POST':
-        form = DebtForm(request.POST, instance=debt)
+        form = IncomeForm(request.POST, instance=income)
         if form.is_valid():
             new_form=form.instance
-            new_form.value=check_debt_value(new_form.name)
+            new_form.value=check_income_value(new_form.name)
             new_form.sum=new_form.qty*new_form.value
             new_form.save()
-            context['debt'] = form.save()
-            context['totalval']=get_debt_sum()
+            context['income'] = form.save()
+            context['totalval']=get_income_sum()
         else:
-            return render(request, 'debt/edit_debt.html', context)
-    return render(request, 'debt/debt_row.html', context)
+            return render(request, 'income/edit_income.html', context)
+    return render(request, 'income/income_row.html', context)
 
-def edit_debt_cancel(request,debt_pk):
+def edit_income_cancel(request,income_pk):
     context = {}
-    debt = Debt.objects.get(pk=debt_pk)
-    context['debt'] = debt
-    context['totalval']=get_debt_sum()
+    income = Income.objects.get(pk=income_pk)
+    context['income'] = income
+    context['totalval']=get_income_sum()
     if request.method == 'POST':
-        form = DebtForm(request.POST, instance=debt)
+        form = IncomeForm(request.POST, instance=income)
         if form.is_valid():
             new_form=form.instance
-            new_form.value=check_debt_value(new_form.name)
+            new_form.value=check_income_value(new_form.name)
             new_form.sum=new_form.qty*new_form.value
             new_form.save()
-            context['debt'] = form.save()
+            context['income'] = form.save()
         else:
-            return render(request, 'debt/edit_debt.html', context)
-    return render(request, 'debt/debt_row.html', context)
+            return render(request, 'income/edit_income.html', context)
+    return render(request, 'income/income_row.html', context)
 
-def get_debt_sum():
-    totalVal=Debt.objects.aggregate(Sum('sum'))
+def get_income_sum():
+    totalVal=Income.objects.aggregate(Sum('sum'))
     return(totalVal['sum__sum'])
 
 @login_required
 def get_charts(request):
-    labelsDebt = []
-    dataDebt = []
+    labelsIncome = []
+    dataIncome = []
 
     labelsDebt = []
     dataDebt = []
     username=request.user.username
-    queryset1 = Debt.objects.all()
-    for debt in queryset1:
-        labelsDebt.append(debt.name)
-        dataDebt.append(debt.sum)
+    queryset1 = Income.objects.all()
+    for income in queryset1:
+        labelsIncome.append(income.name)
+        dataIncome.append(income.sum)
 
     queryset2 = Debt.objects.all()
     for debt in queryset2:
@@ -188,8 +188,8 @@ def get_charts(request):
         dataDebt.append(debt.sum)
 
     return render(request, 'chart.html', {
-        'labelsDebt': labelsDebt,
-        'dataDebt': dataDebt,
+        'labelsIncome': labelsIncome,
+        'dataIncome': dataIncome,
         'labelsDebt': labelsDebt,
         'dataDebt': dataDebt,
         'username':username

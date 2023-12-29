@@ -1,0 +1,9 @@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        getTotal();
+    });
+    function getTotal(){
+        document.getElementById("totalval").innerHTML = "{{ totalval|escapejs|floatformat:2 }}";
+    }
+</script>

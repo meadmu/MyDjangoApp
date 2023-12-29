@@ -1,0 +1,31 @@
+<tr>
+    <td data-label="Name">{{ expense.name }}</td>
+    <td data-label="Value">{{ expense.value|floatformat:4 }}</td>
+    <td data-label="Qty">{{ expense.qty }}</td>
+    <td data-label="Sum">{{ expense.sum|floatformat:4 }}</td>
+    <td data-label="Note">{{ expense.note }}</td>
+    <td data-label="Edit"><button class='btn' 
+        hx-get="{% url 'edit_expense' expense.pk %}" 
+        hx-target="closest tr" 
+        hx-swap="outerHTML">
+        <svg class="bi bi-pencil" width="32" height="32">
+            <use xlink:href="#pencil">
+        </svg></button></td>
+    <td data-label="Delete"><button class='btn' 
+        hx-confirm='Are you sure?' 
+        hx-target="closest tr" 
+        hx-swap="outerHTML swap:1s" 
+        hx-delete="{% url 'delete_expense' expense.pk %}">
+        <svg class="bi bi-trash3" width="32" height="32">
+            <use xlink:href="#trash3">
+        </svg></button></td>
+</tr>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    getTotal();
+});
+function getTotal(){
+    document.getElementById("totalval").innerHTML = "{{ totalval|escapejs|floatformat:2 }}";
+}
+</script>

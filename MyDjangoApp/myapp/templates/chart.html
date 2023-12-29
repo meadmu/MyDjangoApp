@@ -58,6 +58,8 @@
           <a href="/" class="w3-bar-item w3-button">Charts</a>
           <a href="/savings" class="w3-bar-item w3-button">Savings</a>
           <a href="/debts" class="w3-bar-item w3-button">Debts</a>
+          <a href="/incomes" class="w3-bar-item w3-button">Incomes</a>
+          <a href="/expenses" class="w3-bar-item w3-button">Expenses</a>
         </div>
         
         <div id="main">
@@ -79,6 +81,14 @@
               <canvas id="pie-chart2"></canvas>
             </div>
             </div>
+            <div id="container" style="display:flex;flex-wrap: wrap; justify-content: center;">
+              <div style="width:clamp(300px, 30vw, 50%);height: clamp(500px, 50vw, 1000px);">
+                <canvas id="pie-chart3"></canvas>
+              </div>
+              <div style="width:clamp(300px, 30vw, 50%);height: clamp(500px, 50vw, 1000px);">
+                <canvas id="pie-chart4"></canvas>
+              </div>
+              </div>
           
           </div>        
         </div>
@@ -139,12 +149,56 @@
         }
         }
       };
+      var config3 = {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: {{ dataIncome|safe }},
+            backgroundColor: bgColor,
+            label: 'Income'
+          }],
+          labels: {{ labelsIncome|safe }}
+        },
+        options: {
+          maintainAspectRatio: false,
+          responsive: true,
+          title: {
+            display: true,
+            text: 'INCOMES',
+            fontSize:29
+        }
+        }
+      };
+      var config4 = {
+        type: 'doughnut',
+        data: {
+          datasets: [{
+            data: {{ dataExpense|safe }},
+            backgroundColor: bgColor,
+            label: 'Expense'
+          }],
+          labels: {{ labelsExpense|safe }}
+        },
+        options: {
+          maintainAspectRatio: false,
+          responsive: true,
+          title: {
+            display: true,
+            text: 'EXPENSES',
+            fontSize:29
+        }
+        }
+      };
 
       window.onload = function() {
         var ctx = document.getElementById('pie-chart').getContext('2d');
         window.myPie = new Chart(ctx, config);
         var ctx2 = document.getElementById('pie-chart2').getContext('2d');
         window.myPie = new Chart(ctx2, config2);
+        var ctx3 = document.getElementById('pie-chart3').getContext('2d');
+        window.myPie = new Chart(ctx3, config3);
+        var ctx4 = document.getElementById('pie-chart4').getContext('2d');
+        window.myPie = new Chart(ctx4, config4);
       };
 
     </script>

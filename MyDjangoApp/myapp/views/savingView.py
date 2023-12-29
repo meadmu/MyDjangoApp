@@ -148,6 +148,23 @@ def edit_saving_submit(request, saving_pk):
             return render(request, 'saving/edit_saving.html', context)
     return render(request, 'saving/saving_row.html', context)
 
+def edit_saving_cancel(request,saving_pk):
+    context = {}
+    saving = Saving.objects.get(pk=saving_pk)
+    context['saving'] = saving
+    context['totalval']=get_saving_sum()
+    if request.method == 'POST':
+        form = SavingForm(request.POST, instance=saving)
+        if form.is_valid():
+            new_form=form.instance
+            new_form.value=check_saving_value(new_form.name)
+            new_form.sum=new_form.qty*new_form.value
+            new_form.save()
+            context['saving'] = form.save()
+        else:
+            return render(request, 'saving/edit_saving.html', context)
+    return render(request, 'saving/saving_row.html', context)
+
 def get_saving_sum():
     totalVal=Saving.objects.aggregate(Sum('sum'))
     return(totalVal['sum__sum'])

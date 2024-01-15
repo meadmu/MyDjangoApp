@@ -226,6 +226,18 @@ body {
     padding-left: 65px !important;
     margin-right: auto;
     margin-left: auto;
+    
+}
+.main-card-container {
+  margin-top: 20px;
+  margin-right: auto;
+  margin-left: auto;
+  display:flex;
+  flex-wrap: wrap; 
+  justify-content: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: #f1f1f1;
+  
 }
 .container-login {
   padding-top: 65px;
@@ -402,4 +414,78 @@ body {
   
   .totalVal {
     font-size:clamp(25px, 2.6vw, 48px);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  /* Float four columns side by side */
+  .card-column {
+    float: left;
+    width: auto;
+    height: auto;
+    padding: 10px;
+  }
+  
+  /* Remove extra left and right margins, due to padding in columns */
+  .card-row {
+    margin: 0 -5px;
+    display: contents;
+  }
+  
+  /* Clear floats after the columns */
+  .card-row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Style the counter cards */
+  .card-base {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+    padding: 16px;
+    text-align: center;
+    background-color: #f1f1f1;
+  }
+  
+  /* Responsive columns - one column layout (vertical) on small screens */
+  @media screen and (max-width: 600px) {
+    .card-columnn {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+    }
+  }
+
+  .pie-chart{
+    width:clamp(300px, 30vw, 50%); 
+    height: clamp(300px, 0.6vh, 1000px);
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+
+  .card-alone{
+    
+    width:clamp(300px, 30vw, 0.5vw); 
+    height: clamp(300px, 0.6vh, 1000px);
+    margin-right: 20px;
+    margin-left: 20px;
+    font-size: 36px;
+    font-family:"Segoe UI",Arial,sans-serif;
+    font-weight:400;
+    display: flex;
+    align-items: baseline;
+    align-content: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .card-alone .netvalue{
+    border-top: 2px solid #333;
+    border-bottom: 2px solid #333;
   }

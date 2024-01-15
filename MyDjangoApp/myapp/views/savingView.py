@@ -2,7 +2,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.shortcuts import render
 #from .models import Phone
-from myapp.models import Saving,StockMarket,Debt
+from myapp.models import Saving,StockMarket,Debt,Choice
 #from .models import Saving as Stock 
 import myapp.stockMarket
 import myapp.choices as choices
@@ -24,6 +24,7 @@ from django.db.models import Sum
 username=''
 def SavingHomePageView(request):
     username=request.user.username
+    
     return render(request, 'saving/savings.html', {'username':username})
 
 # login page
@@ -53,7 +54,8 @@ class SavingForm(forms.ModelForm):
     sum = forms.FloatField(disabled=True,required=False)
     value=forms.FloatField(disabled=True,required=False)
     qty=forms.FloatField()
-    name= forms.CharField(widget=forms.Select(choices=choices.SAVING_CHOICES))
+    #name= forms.CharField(widget=forms.Select(choices=choices.SavingChoices()))
+    name= forms.ModelChoiceField(queryset=Choice.objects.values_list('name1', flat = True),to_field_name="name1")
     class Meta:
         model = Saving
         fields = ('name', 'value' , 'qty','sum','note') 

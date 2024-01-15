@@ -84,3 +84,7 @@ class StockMarket(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Choice(models.Model):
+    name1=models.CharField(max_length=50,null=True)
+

@@ -71,27 +71,69 @@
         </div>
       
           <!-- Page content -->
-          <div class="w3-container" >
-          
-            <div id="container" style="display:flex;flex-wrap: wrap; justify-content: center;">
-            <div style="width:clamp(300px, 30vw, 50%); height: clamp(500px, 50vw, 1000px);">
-              <canvas id="pie-chart"></canvas>  
-            </div>  
-            <div style="width:clamp(300px, 30vw, 50%);height: clamp(500px, 50vw, 1000px);">
-              <canvas id="pie-chart2"></canvas>
+          <div class="w3-container">
+            
+            <div class="main-card-container">
+              <div class="card-row"></divclass>             
+                <div class="card-column">
+                  <div class="card-base">
+                    <div class="pie-chart">
+                      <canvas id="pie-chart-saving"></canvas>  
+                    </div>  
+                  </div>
+                </div>
+                <div class="card-column">
+                  <div class="card-base">
+                    <div class="pie-chart">
+                      <canvas id="pie-chart-debt"></canvas>
+                    </div>  
+                  </div>
+                </div>
+                <div class="card-column">
+                  <div class="card-base">
+                    <div class="card-alone">                    
+                      <h1>Savings:{{totalSaving|stringformat:".2f"}}</h1>  
+                      <h1>Debts:{{totalDebt|stringformat:".2f"}}</h1>  
+                      <div class="netvalue">
+                        Net:{{netSaving|stringformat:".2f"}}
+                      </div>
+                    </div>  
+                  </div>
+                </div>
+              </div>          
             </div>
-            </div>
-            <div id="container" style="display:flex;flex-wrap: wrap; justify-content: center;">
-              <div style="width:clamp(300px, 30vw, 50%);height: clamp(500px, 50vw, 1000px);">
-                <canvas id="pie-chart3"></canvas>
-              </div>
-              <div style="width:clamp(300px, 30vw, 50%);height: clamp(500px, 50vw, 1000px);">
-                <canvas id="pie-chart4"></canvas>
-              </div>
-              </div>
-          
+            <div class="main-card-container">
+              <div class="card-row"></divclass>
+                <div class="card-column">
+                  <div class="card-base">
+                    <div class="pie-chart">
+                      <canvas id="pie-chart-income"></canvas>  
+                    </div>  
+                  </div>
+                </div>
+                <div class="card-column">
+                  <div class="card-base">
+                    <div class="pie-chart">
+                      <canvas id="pie-chart-expense"></canvas>
+                    </div>  
+                  </div>
+                </div>
+                <div class="card-column">
+                  <div class="card-base">
+                    <div class="card-alone">                    
+                      <h1>Incomes:{{totalIncome|stringformat:".2f"}}</h1>  
+                      <h1>Expenses:{{totalExpense|stringformat:".2f"}}</h1>  
+                      <div class="netvalue">
+                        Net:{{netIncome|stringformat:".2f" }}
+                      </div>
+                    </div>  
+                  </div>
+                </div>
+              </div>          
+            </div>             
           </div>        
         </div>
+        
         <script>
           function w3_open() {
             document.getElementById("main").style.marginLeft = "clamp(110px, 15%, 1000px)";
@@ -107,6 +149,20 @@
           </script>    
       <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
       <script>
+        const doughnutLabel={
+          id:'doughnutLabel',
+          beforeDatasetDraw(chart,args,pluginoptions){
+            const {ctx,data}=chart;
+            ctx.save();
+            const xCoor=chart.getDatasetMeta(0).data[0].x;
+            const yCoor=chart.getDatasetMeta(0).data[0].y;
+            ctx.font='bold 30px sans-serif';
+            ctx.fillstyle='rgba(54,162,235,1)';
+            ctx.textAling='center';
+            ctx.textBaseLine='middle';
+            ctx.filltext('${data.labels[0]}:${data.datasets[0].data[0]}',xCoor,y)
+        }
+      }
       var bgColor = ["#878BB6", "#FFEA88", "#FF8153", "#4ACAB4", "#c0504d", "#8064a2", "#772c2a", "#f2ab71", "#2ab881", "#4f81bd", "#2c4d75"];
       var config = {
         type: 'doughnut',
@@ -125,9 +181,27 @@
             display: true,
             text: 'SAVINGS',
             fontSize:29
-        }
-        }
-      };
+        },},
+        plugins: [{
+    id: 'text',
+    // beforeDraw: function(chart, a, b) {
+    //   var width = chart.width,
+    //     height = chart.height,
+    //     ctx = chart.ctx;
+
+    //   ctx.restore();
+    //   var fontSize = (height / 150).toFixed(2);
+    //   ctx.font = fontSize + "em sans-serif";
+    //   ctx.textBaseline = "middle";
+
+    //   var text = "75%",
+    //     textX = Math.round((width - ctx.measureText(text).width) / 2),
+    //     textY = height / 2;
+
+    //   ctx.fillText(text, textX, textY);
+    //   ctx.save();
+    // }
+  }]};
 
       var config2 = {
         type: 'doughnut',
@@ -191,13 +265,13 @@
       };
 
       window.onload = function() {
-        var ctx = document.getElementById('pie-chart').getContext('2d');
+        var ctx = document.getElementById('pie-chart-saving').getContext('2d');
         window.myPie = new Chart(ctx, config);
-        var ctx2 = document.getElementById('pie-chart2').getContext('2d');
+        var ctx2 = document.getElementById('pie-chart-debt').getContext('2d');
         window.myPie = new Chart(ctx2, config2);
-        var ctx3 = document.getElementById('pie-chart3').getContext('2d');
+        var ctx3 = document.getElementById('pie-chart-income').getContext('2d');
         window.myPie = new Chart(ctx3, config3);
-        var ctx4 = document.getElementById('pie-chart4').getContext('2d');
+        var ctx4 = document.getElementById('pie-chart-expense').getContext('2d');
         window.myPie = new Chart(ctx4, config4);
       };
 

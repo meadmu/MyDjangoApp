@@ -1,3 +1,5 @@
+from .models import (Stock,StockMarket,Debt,Choice)
+import itertools
 SAVING_CHOICES= [
 ('Altın/ONS','Altın/ONS'),
 ('Gümüş/ONS','Gümüş/ONS'),
@@ -36,6 +38,11 @@ SAVING_CHOICES= [
 ('14 Ayar','14 Ayar'),
 ]
 
+def SavingChoices():
+    choices=Choices.objects.values_list('name1','name2')
+    choices=list(itertools.chain(*choices))
+    print(choices)
+    return(choices)
 
 
 

@@ -34,7 +34,7 @@ class WebRequest():
                         cursor.execute(f"INSERT INTO myapp_stockmarket(name,value) VALUES ('{dataset[0]}',{dataset[1]});")
                     if (update==1):
                         cursor.execute(f"UPDATE myapp_stockmarket set value='{dataset[1]}' where name='{dataset[0]}'")
-                        cursor.execute(f"INSERT INTO myapp_choice(name1) VALUES ('{dataset[0]}');")
+                        #cursor.execute(f"INSERT INTO myapp_choice(name1) VALUES ('{dataset[0]}');")
                 except:
                     pass
         except:
